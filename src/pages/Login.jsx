@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TiUser } from 'react-icons/ti';
 import { TbPasswordUser } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
-import authService from '../services/authService.js';
+import { login } from '../services/authService.js'
 import "../styles/Login_Style.css";
 
 function Login() {
@@ -10,15 +10,18 @@ function Login() {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        const succes = await authService.login({email, password});
-        if(succes) {
-            navigate('/dashboard');
-        }else{
-        console.log("Error en login")
+    const handleLogin = async (event) => {
+        event.preventDefault();
+
+        try {
+            const response = await login(email, password);
+            if(response) {
+                navigate('/dashboard');
+            }
+        } catch (error) {
+            console.error('Error en el inicio de sesión:', error);
         }
-    }
+    };
 
     return (
         <>
@@ -50,7 +53,7 @@ function Login() {
                             <label htmlFor="remember">Recordar contraseña?</label>
                         </div>
                         <div className='register-link'>
-                            <p>No te has registrado? <a href="">Registrarse</a></p>
+                            <p>No te has registrado? <a href="/dashboard">Registrarse</a></p>
                         </div>
                     </div>
 
