@@ -1,10 +1,14 @@
 import React from 'react';
+import '../styles/Dashboard_Style.css';
 
 function Dashboard() {
     return (
-        <div>
-            <h1>Dashboard</h1>
-        </div>
+        <>
+            <div className="dashboard">
+                <h1>Welcome to Streaming App</h1>
+                <p>Manage your subscriptions with ease.</p>
+            </div>
+        </>
     )
 }
 
