@@ -4,11 +4,11 @@ import { FaBars } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 import '../styles/NavBar_Style.css';
 
-function NavBar() {
-    const [isHidden, setIsHidden] = useState(false);
+function NavBar({isHidden,onToggleNav}) {
 
     const toggleNavBar = () => {
-        setIsHidden(!isHidden);
+        const actState = !isHidden;
+        onToggleNav(actState);
     };
 
     return (

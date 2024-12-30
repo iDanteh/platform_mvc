@@ -6,12 +6,18 @@ import { useAuth } from './context/AuthContext.jsx';
 
 function App() {
   const { isAuthenticated } = useAuth();
+  const [isNavHidden, setIsNavHidden] = useState(false);
+
+  const handleToggleNav = (isHidden) => {
+    setIsNavHidden(isHidden);
+  };
 
   return (
     <>
       <div style={{ display: 'flex' }}>
-        {isAuthenticated && <NavBar />}
-        <div style={{ flex: 1 }}>
+        {isAuthenticated && <NavBar isHidden={isNavHidden} onToggleNav={handleToggleNav}/>}
+        <div style={{ flex: 1,marginLeft: isAuthenticated && !isNavHidden ? '250px' : '0', 
+          transition: 'margin-left 0.3s ease' }}>
           <AppRouter />
         </div>
       </div>

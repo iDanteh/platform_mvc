@@ -50,6 +50,7 @@
     font-size: 1.8em;
     cursor: pointer;
     transition: transform 0.2s ease;
+    
 }
 
 .menu-toggle:hover {
@@ -87,6 +88,7 @@
     text-align: center;
     transition: background-color 0.3s ease, transform 0.2s ease;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: #5266cd;
 }
 
 .navbar nav ul li a:hover {

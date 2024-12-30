@@ -1,0 +1,43 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.clients{
+    padding: 20px;
+    flex: 1;
+    transition: margin-left 0.3s ease;
+    margin-left: 60px;
+}
+.clients.expanded {
+    margin-left: 0;
+}
+.clients div{
+    padding: 10px;
+    font-size: 18px;
+    display: flex;
+}
+.clients label{
+    margin-right: 5px;
+    width: 80px;
+}
+.clients input{
+    padding-left: 10px;
+    border-radius: 10px;
+    border: none;
+    font-size: 18px;
+    height: 25px;
+}
+.clients button{
+    font-size: 16px;
+    border-radius: 10px;
+    height: 30px;
+    width: 180px;
+    background: #3f58d5;
+    color: white;
+    margin-left: 50px;
+    border-style: none;
+    box-shadow: 0 2px 2px black;
+}
+.clients button:hover{
+    background: #6a77b8;
+}

@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/Login.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
+import Clients from "../pages/Clients.jsx";
 
 // Función dedicada para realizar un logout del sistema
 function Logout() {
@@ -27,7 +28,10 @@ function AppRouter() {
             <Route path="/dashboard" element={<Dashboard />} />
             {/* <Route path="/subscriptions" element={<Subscriptions />} /> */}
             <Route path="/logout" element={<Logout />}/>
+            <Route path="/clients" element={<Clients />} />
+
             </>
+
         ) : (
             // Rutas accesibles solo si el usuario no está autenticado
             <>
