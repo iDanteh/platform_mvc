@@ -23,9 +23,7 @@ function Clients() {
     
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Aquí puedes manejar el envío del formulario, por ejemplo, enviarlo al backend
         console.log("Cliente agregado:", formData);
-        // Opcional: Limpiar el formulario después del envío
         setFormData({ name: "", email: "", phone: "" });
     };
 
