@@ -34,7 +34,10 @@ function NavBar({isHidden,onToggleNav}) {
                             <Link to='/clients'>Clientes</Link>
                         </li>
                         <li>
-                            <Link to='/suscriptions'>Suscripciones</Link>
+                            <Link to='/suscripciones'>Suscripciones</Link>
+                        </li>
+                        <li>
+                            <Link to= '/cuentas'>Cuentas</Link>
                         </li>
                         <li>
                             <Link to='/logout'>Cerrar Sesión</Link>

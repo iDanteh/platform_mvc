@@ -4,6 +4,7 @@ import Login from "../pages/Login.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import Clients from "../pages/Clients.jsx";
+import Suscripciones from '../pages/Suscripciones.jsx';
 
 // Función dedicada para realizar un logout del sistema
 function Logout() {
@@ -29,6 +30,7 @@ function AppRouter() {
             {/* <Route path="/subscriptions" element={<Subscriptions />} /> */}
             <Route path="/logout" element={<Logout />}/>
             <Route path="/clients" element={<Clients />} />
+            <Route path="/suscripciones" element={<Suscripciones />} />
 
             </>
 

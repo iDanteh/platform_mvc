@@ -123,7 +123,7 @@ const ClientsForm = ({ onSubmit }) => {
             <div>
                 <label htmlFor="iPassword">Contraseña:</label>
                 <input
-                    type="password"
+                    type="text"
                     name="password"
                     id="iPassword"
                     value={formData.password || passwordSuggestion}
