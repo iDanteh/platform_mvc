@@ -4,7 +4,7 @@ import useSearchUsers from '../utils/useSearchUsers.js';
 import { MdPersonSearch } from "react-icons/md";
 import '../styles/Suscripciones.css';
 
-function Suscripciones() {
+function Suscripciones({ selectedPlatform, setSelectedPlatform}) {
     const [searchQuery, setSearchQuery] = useState('');
     const [userInfo, setUserInfo] = useState(null);
 
@@ -45,6 +45,7 @@ function Suscripciones() {
                 <div className='user-information'>
                     <h2>Información del usuario</h2>
                     <div className='user-info'>
+                        <p>Id: {userInfo.id_User}</p>
                         <p>Nombre: {userInfo.nombre_user}</p>
                         <p>Correo: {userInfo.email}</p>
                         <p>Teléfono: {userInfo.phone_user}</p>
@@ -54,7 +55,9 @@ function Suscripciones() {
 
             {/* Formulario de suscripción */}
             <div className='form-content'>
-                <SuscripcionForm />
+                <SuscripcionForm
+                    selectedPlatform={selectedPlatform}
+                    setSelectedPlatform={setSelectedPlatform}/>
             </div>
 
         </div>

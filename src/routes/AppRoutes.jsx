@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/Login.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
@@ -6,11 +6,9 @@ import { useAuth } from "../context/AuthContext.jsx";
 import Clients from "../pages/Clients.jsx";
 import Suscripciones from '../pages/Suscripciones.jsx';
 
-// Función dedicada para realizar un logout del sistema
 function Logout() {
     const { logout } = useAuth();
 
-    // Llama a logout y redirige al usuario
     React.useEffect(() => {
         logout();
     }, [logout]);
@@ -19,28 +17,24 @@ function Logout() {
 }
 
 function AppRouter() {
-    const { isAuthenticated} = useAuth();
+    const { isAuthenticated } = useAuth();
+    const [selectedPlatform, setSelectedPlatform] = useState('');
 
     return (
         <Routes>
-        {isAuthenticated ? (
-            // Rutas accesibles solo si el usuario está autenticado
-            <>
-            <Route path="/dashboard" element={<Dashboard />} />
-            {/* <Route path="/subscriptions" element={<Subscriptions />} /> */}
-            <Route path="/logout" element={<Logout />}/>
-            <Route path="/clients" element={<Clients />} />
-            <Route path="/suscripciones" element={<Suscripciones />} />
-
-            </>
-
-        ) : (
-            // Rutas accesibles solo si el usuario no está autenticado
-            <>
-            <Route path="/" element={<Login />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-            </>
-        )}
+            {isAuthenticated ? (
+                <>
+                    <Route path="/dashboard" element={<Dashboard setSelectedPlatform={setSelectedPlatform} />} />
+                    <Route path="/clients" element={<Clients />} />
+                    <Route path="/suscripciones" element={<Suscripciones selectedPlatform={selectedPlatform} setSelectedPlatform={setSelectedPlatform} />} />
+                    <Route path="/logout" element={<Logout />} />
+                </>
+            ) : (
+                <>
+                    <Route path="/" element={<Login />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                </>
+            )}
         </Routes>
     );
 }

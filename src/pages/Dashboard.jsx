@@ -8,20 +8,21 @@ import NortonLogo from '../assets/svg/norton-antivirus-logo.svg';
 import YoutubeLogo from '../assets/svg/youtube-6.svg';
 import '../styles/Dashboard_Style.css';
 
-function Dashboard() {
+function Dashboard({setSelectedPlatform}) {
     const navigate = useNavigate();
 
     const platforms = [
-        { name: 'Netflix', logo: NetflixLogo, path: '/suscripciones' },
+        { name: 'Netflix', logo: NetflixLogo, path: '/suscripciones', id_Platform: 1 },
         { name: 'OfficeLogo', logo: OfficeLogo, path: '/suscripciones' },
-        { name: 'HBO Max', logo: HBOLogo, path: '/suscripciones' },
+        { name: 'HBO', logo: HBOLogo, path: '/suscripciones' },
         { name: 'Disney', logo: DisneyLogo, path: '/suscripciones' },
         { name: 'Norton', logo: NortonLogo, path: '/suscripciones' },
         { name: 'Youtube', logo: YoutubeLogo, path: '/suscripciones' },
     ];
 
-    const handleNavigation = (path) => {
-        navigate(path);
+    const handleNavigation = (platform) => {
+        setSelectedPlatform(platform.name);
+        navigate(platform.path);
     };
 
     return (
@@ -34,7 +35,7 @@ function Dashboard() {
                     <div
                         key={platform.name}
                         className="svg-platform"
-                        onClick={() => handleNavigation(platform.path)}
+                        onClick={() => handleNavigation(platform)}
                     >
                         <img src={platform.logo} alt={`${platform.name}-logo`} />
                     </div>
