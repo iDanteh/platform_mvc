@@ -9,3 +9,13 @@ export const registerClient = async (formData) => {
         throw error;
     }
 };
+
+export const fetchClients = async () => {
+    try {
+        const response = await axiosInstance.get('/users');
+        return response.data;
+    } catch (error) {
+        console.error('Error al obtener los clientes:', error);
+        throw error;
+    }
+};

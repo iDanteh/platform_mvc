@@ -59,79 +59,84 @@ const ClientsForm = ({ onSubmit }) => {
 
     return (
         <form onSubmit={handleFormSubmit}>
-            <div>
-                <label htmlFor="iNombre">Nombre:</label>
-                <input
-                    type="text"
-                    name="nombre_user"
-                    id="iNombre"
-                    value={formData.nombre_user}
-                    onChange={handleChange}
-                    required
-                />
+            <div className='formDivClients1'>
+                <div>
+                    <label htmlFor="iNombre">Nombre:</label>
+                    <input
+                        type="text"
+                        name="nombre_user"
+                        id="iNombre"
+                        value={formData.nombre_user}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div>
+                    <label htmlFor="iApellidoPat">Apellido Paterno:</label>
+                    <input
+                        type="text"
+                        name="apellido_pat"
+                        id="iApellidoPat"
+                        value={formData.apellido_pat}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div>
+                    <label htmlFor="iApellidoMat">Apellido Materno:</label>
+                    <input
+                        type="text"
+                        name="apellido_mat"
+                        id="iApellidoMat"
+                        value={formData.apellido_mat}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
             </div>
 
-            <div>
-                <label htmlFor="iApellidoPat">Apellido Paterno:</label>
-                <input
-                    type="text"
-                    name="apellido_pat"
-                    id="iApellidoPat"
-                    value={formData.apellido_pat}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
+            <div className='formDivClients2'>
+                <div>
+                    <label htmlFor="iPhone">Teléfono:</label>
+                    <input
+                        type="text"
+                        name="phone_user"
+                        id="iPhone"
+                        value={formData.phone_user}
+                        onChange={handleChange}
+                        pattern='[0-9]{10}'
+                        required
+                    />
+                </div>
 
-            <div>
-                <label htmlFor="iApellidoMat">Apellido Materno:</label>
-                <input
-                    type="text"
-                    name="apellido_mat"
-                    id="iApellidoMat"
-                    value={formData.apellido_mat}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
+                <div>
+                    <label htmlFor="iEmail">Correo Electrónico:</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="iEmail"
+                        value={formData.email || emailSuggestion}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-            <div>
-                <label htmlFor="iPhone">Teléfono:</label>
-                <input
-                    type="text"
-                    name="phone_user"
-                    id="iPhone"
-                    value={formData.phone_user}
-                    onChange={handleChange}
-                    pattern='[0-9]{10}'
-                    required
-                />
-            </div>
+                <div>
+                    <label htmlFor="iPassword">Contraseña:</label>
+                    <input
+                        type="text"
+                        name="password"
+                        id="iPassword"
+                        value={formData.password || passwordSuggestion}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-            <div>
-                <label htmlFor="iEmail">Correo Electrónico:</label>
-                <input
-                    type="email"
-                    name="email"
-                    id="iEmail"
-                    value={formData.email || emailSuggestion}
-                    onChange={handleChange}
-                    required
-                />
+                
             </div>
-
-            <div>
-                <label htmlFor="iPassword">Contraseña:</label>
-                <input
-                    type="text"
-                    name="password"
-                    id="iPassword"
-                    value={formData.password || passwordSuggestion}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-
             <button type="submit">Agregar</button>
         </form>
     );

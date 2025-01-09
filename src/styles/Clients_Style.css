@@ -6,26 +6,37 @@
     padding: 20px;
     flex: 1;
     transition: margin-left 0.3s ease;
-    margin-left: 60px;
+    margin-left: 25px;
+    margin-top: 50px;
+}
+.clients .formDivClients1{
+    display: flex;
+}
+.clients .formDivClients2{
+    display: flex;
 }
 .clients.expanded {
     margin-left: 0;
 }
+.clients h1{
+    margin-left: 25px;
+}
 .clients div{
-    padding: 10px;
+    padding: 6px;
     font-size: 18px;
     display: flex;
+    width: auto;
 }
 .clients label{
     margin-right: 5px;
-    width: 80px;
+    width: 150px;
 }
 .clients input{
     padding-left: 10px;
     border-radius: 10px;
     border: none;
     font-size: 18px;
-    height: 25px;
+    height: 28px;
 }
 .clients button{
     font-size: 16px;
