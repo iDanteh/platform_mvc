@@ -15,3 +15,16 @@ export const generatePasswordSuggestions = (data) => {
     const randomSpecialCharacter = specialCharacters.charAt(Math.floor(Math.random() * specialCharacters.length));
     return `${firstLetter}${secondLetter}${randomNumbers}${randomSpecialCharacter}`;
 };
+
+export const generateProfileSuggestion = (userInfo) => {
+    const { nombre_user, id_User } = userInfo;
+    const randomNumber = Math.floor(100 + Math.random() * 900);
+    return `${nombre_user}_${id_User}_${randomNumber}`;
+};
+
+export const generatePasswordSuggestion = (userInfo) => {
+    const specialCharacters = "!@#$%^&*()_+-=[]{}|;:,.<>?";
+    const randomNumbers = Math.floor(1000 + Math.random() * 9000);
+    const randomSpecialCharacter = specialCharacters.charAt(Math.floor(Math.random() * specialCharacters.length));
+    return `Pass${randomNumbers}${randomSpecialCharacter}`;
+};

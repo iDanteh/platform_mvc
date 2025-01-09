@@ -1,34 +1,127 @@
 import React, { useEffect, useState } from 'react';
+import { generateProfileSuggestion, generatePasswordSuggestion } from '../utils/formUtils'
+import { registerSubscription } from '../services/suscripcionService';
+import Modal from '../components/Modal.jsx';
 
-const SuscripcionForm = ({ selectedPlatform, setSelectedPlatform }) => {
-    const hangleChange = (e) => {
+const SuscripcionForm = ({ selectedPlatform, setSelectedPlatform, userInfo }) => {
+    const [perfil, setPerfil] = useState('');
+    const [password, setPassword] = useState('');
+    const [finishDate, setFinishDate] = useState('');
+
+    const [profileSuggestion, setProfileSuggestion] = useState('');
+    const [passwordSuggestion, setPasswordSuggestion] = useState('');
+
+    // Estado del modal
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [modalTitle, setModalTitle] = useState('');
+    const [modalMessage, setModalMessage] = useState('');
+    const [showConfirmButton, setShowConfirmButton] = useState(false);
+
+    // Genera sugerencias de perfil y contraseña en tiempo real
+    useEffect(() => {
+        if (userInfo) {
+            const profile = generateProfileSuggestion(userInfo);
+            const pass = generatePasswordSuggestion(userInfo);
+            setProfileSuggestion(profile);
+            setPasswordSuggestion(pass);
+        }
+    }, [userInfo]);
+
+    const handleChange = (e) => {
         setSelectedPlatform(e.target.value);
+    };    
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Validar que haya un usuario seleccionado
+        if (!userInfo) {
+            setModalTitle('Error');
+            setModalMessage('Por favor, selecciona un usuario.');
+            setShowConfirmButton(false);
+            setModalIsOpen(true);
+            return;
+        }
+
+        // Construir el objeto JSON con los datos del formulario
+        const formData = {
+            fk_user: userInfo.id_User,
+            fk_Platform: selectedPlatform,
+            perfil: perfil || profileSuggestion,
+            password: password || passwordSuggestion,
+            start_date: new Date().toISOString().split('T')[0],
+            finish_date: finishDate,
+            state: 'Activo',
+        };      
+
+        // Llamar a la función del servicio para registrar la suscripción
+        const response = await registerSubscription(formData);
+
+        if (response?.error) {
+            setModalTitle('Error');
+            setModalMessage('Error al registrar la suscripción.');
+            setShowConfirmButton(false);
+        } else {
+            setModalTitle('Éxito');
+            setModalMessage('Suscripción registrada con éxito.');
+            setShowConfirmButton(true);
+        }
+        setModalIsOpen(true); // Abrir el modal
     };
 
     
     return (
         <div className='form-suscripcion'>
-                <form action="">
+                <form onSubmit={handleSubmit}>
                     <label htmlFor="Plataforma">Plataforma</label>
                     <select 
                         name="platforms" 
                         id="plat-select" 
                         value={selectedPlatform}
-                        onChange={hangleChange}>
+                        onChange={handleChange}>
                             <option value="">---Seleccionar plataforma---</option>
-                            <option value="Netflix">Netflix</option>
-                            <option value="Disney">Disney</option>
-                            <option value="HBO">HBO</option>
+                            <option value="1">Netflix</option>
+                            <option value="2">Disney</option>
+                            <option value="3">HBO</option>
                     </select>
-                    <label htmlFor="Tiempo">Tiempo de suscripcion</label>
-                    <input type="date" name="tiempo" id="tiempo-select" />
+                    <label htmlFor="Tiempo">Tiempo de suscripción</label>
+                    <input
+                        type="date"
+                        name="tiempo"
+                        id="tiempo-select"
+                        value={finishDate}
+                        onChange={(e) => setFinishDate(e.target.value)}
+                    />
+
                     <label htmlFor="Perfil">Perfil</label>
-                    <input type="text" name="perfil" id="perfil-select" />
+                    <input
+                        type="text"
+                        name="perfil"
+                        id="perfil-select"
+                        value={perfil || profileSuggestion}
+                        onChange={(e) => setPerfil(e.target.value)}
+                    />
+
                     <label htmlFor="Contraseña">Contraseña</label>
-                    <input type="text" name="contraseña" id="contraseña-select" />
+                    <input
+                        type="text"
+                        name="contraseña"
+                        id="contraseña-select"
+                        value={password || passwordSuggestion}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
 
                     <button type="submit">Registrar</button>
                 </form>
+
+                <Modal
+                isOpen={modalIsOpen}
+                title={modalTitle}
+                message={modalMessage}
+                onClose={() => setModalIsOpen(false)} // Cerrar modal
+                onConfirm={() => setModalIsOpen(false)} // Confirmar (opcional)
+                showConfirmButton={showConfirmButton} // Solo muestra el botón si es necesario
+            />
             </div>
     );
 };

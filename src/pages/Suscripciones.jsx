@@ -57,7 +57,8 @@ function Suscripciones({ selectedPlatform, setSelectedPlatform}) {
             <div className='form-content'>
                 <SuscripcionForm
                     selectedPlatform={selectedPlatform}
-                    setSelectedPlatform={setSelectedPlatform}/>
+                    setSelectedPlatform={setSelectedPlatform}
+                    userInfo={userInfo}/>
             </div>
 
         </div>

@@ -12,16 +12,16 @@ function Dashboard({setSelectedPlatform}) {
     const navigate = useNavigate();
 
     const platforms = [
-        { name: 'Netflix', logo: NetflixLogo, path: '/suscripciones', id_Platform: 1 },
-        { name: 'OfficeLogo', logo: OfficeLogo, path: '/suscripciones' },
-        { name: 'HBO', logo: HBOLogo, path: '/suscripciones' },
-        { name: 'Disney', logo: DisneyLogo, path: '/suscripciones' },
-        { name: 'Norton', logo: NortonLogo, path: '/suscripciones' },
-        { name: 'Youtube', logo: YoutubeLogo, path: '/suscripciones' },
+        { id: 1, name: 'Netflix', logo: NetflixLogo, path: '/suscripciones' },
+        { id: 2, name: 'Office', logo: OfficeLogo, path: '/suscripciones' },
+        { id: 3, name: 'HBO', logo: HBOLogo, path: '/suscripciones' },
+        { id: 4, name: 'Disney', logo: DisneyLogo, path: '/suscripciones' },
+        { id: 5, name: 'Norton', logo: NortonLogo, path: '/suscripciones' },
+        { id: 6, name: 'Youtube', logo: YoutubeLogo, path: '/suscripciones' },
     ];
 
     const handleNavigation = (platform) => {
-        setSelectedPlatform(platform.name);
+        setSelectedPlatform(platform.id);
         navigate(platform.path);
     };
 
