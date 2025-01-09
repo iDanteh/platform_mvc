@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SuscripcionForm from '../components/SuscripcionForm';
+import TableSuscripciones from '../components/TableSuscripciones.jsx';
 import useSearchUsers from '../utils/useSearchUsers.js';
 import { MdPersonSearch } from "react-icons/md";
 import '../styles/Suscripciones.css';
@@ -60,6 +61,9 @@ function Suscripciones({ selectedPlatform, setSelectedPlatform}) {
                     setSelectedPlatform={setSelectedPlatform}
                     userInfo={userInfo}/>
             </div>
+
+        {/* Tabla de suscripciones */}
+            <TableSuscripciones />
 
         </div>
     );

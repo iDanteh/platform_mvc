@@ -9,3 +9,13 @@ export const registerSubscription = async (formData) => {
         return { error: 'No se pudo registrar la suscripción. Inténtalo de nuevo más tarde.' };
     }
 };
+
+export const getSubscription = async () => {
+    try {
+        const response = await axiosInstance.get('/suscriptions');
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        return [];        
+    }
+};

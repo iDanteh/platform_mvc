@@ -81,8 +81,18 @@ const SuscripcionForm = ({ selectedPlatform, setSelectedPlatform, userInfo }) =>
                         onChange={handleChange}>
                             <option value="">---Seleccionar plataforma---</option>
                             <option value="1">Netflix</option>
-                            <option value="2">Disney</option>
+                            <option value="2">Office</option>
                             <option value="3">HBO</option>
+                            <option value="4">Disney</option>
+                            <option value="5">Norton</option>
+                            <option value="6">Youtube</option>
+                            <option value="7">Spotify</option>
+                            <option value="8">Amazon Prime</option>
+                            <option value="9">Crunchyroll</option>
+                            <option value="10">Apple TV</option>
+                            <option value="11">Claro</option>
+                            <option value="12">Paramount+</option>
+                            <option value="13">Star+</option>
                     </select>
                     <label htmlFor="Tiempo">Tiempo de suscripción</label>
                     <input

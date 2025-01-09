@@ -6,6 +6,13 @@ import HBOLogo from '../assets/svg/hbo-4.svg';
 import DisneyLogo from '../assets/svg/disney.svg';
 import NortonLogo from '../assets/svg/norton-antivirus-logo.svg';
 import YoutubeLogo from '../assets/svg/youtube-6.svg';
+import SpotifyLogo from '../assets/svg/logo-spotify.svg';
+import AmazonPrimeLogo from '../assets/svg/amazon-prime-video-1.svg';
+import CrunchyLogo from '../assets/svg/crunchyroll-logo.svg';
+import AppleTVLogo from '../assets/svg/apple-tv.svg';
+import ClaroLogo from '../assets/svg/claro-1.svg';
+import ParamountLogo from '../assets/svg/paramount-3.svg';
+import StarLogo from '../assets/svg/Star+.svg';
 import '../styles/Dashboard_Style.css';
 
 function Dashboard({setSelectedPlatform}) {
@@ -18,6 +25,13 @@ function Dashboard({setSelectedPlatform}) {
         { id: 4, name: 'Disney', logo: DisneyLogo, path: '/suscripciones' },
         { id: 5, name: 'Norton', logo: NortonLogo, path: '/suscripciones' },
         { id: 6, name: 'Youtube', logo: YoutubeLogo, path: '/suscripciones' },
+        { id: 7, name: 'Spotify', logo: SpotifyLogo, path: '/suscripciones' },
+        { id: 8, name: 'Amazon Prime', logo: AmazonPrimeLogo, path: '/suscripciones' },
+        { id: 9, name: 'Crunchyroll', logo: CrunchyLogo, path: '/suscripciones' },
+        { id: 10, name: 'Apple TV', logo: AppleTVLogo, path: '/suscripciones' },
+        { id: 11, name: 'Claro', logo: ClaroLogo, path: '/suscripciones' },
+        { id: 12, name: 'Paramount', logo: ParamountLogo, path: '/suscripciones' },
+        { id: 13, name: 'Star+', logo: StarLogo, path: '/suscripciones' },
     ];
 
     const handleNavigation = (platform) => {

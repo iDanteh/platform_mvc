@@ -28,6 +28,7 @@ function AppRouter() {
                     <Route path="/clients" element={<Clients />} />
                     <Route path="/suscripciones" element={<Suscripciones selectedPlatform={selectedPlatform} setSelectedPlatform={setSelectedPlatform} />} />
                     <Route path="/logout" element={<Logout />} />
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
                 </>
             ) : (
                 <>
