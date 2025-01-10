@@ -3,6 +3,7 @@ import Modal from '../components/Modal.jsx';
 import ClientsForm from '../components/ClientForm.jsx'
 import '../styles/Clients_Style.css';
 import { registerClient, fetchClients } from '../services/userService.js';
+import RegisterClient from '../components/RegisterClient.jsx';
 
 
 function Clients() {
@@ -30,6 +31,7 @@ function Clients() {
         try {
             const response = await registerClient(formData);
             setModalMessage('Cliente registrado con éxito.');
+            loadClients();
         } catch (error) {
             setModalMessage('Error al registrar cliente. Inténtalo de nuevo.');
         } finally {
@@ -44,7 +46,7 @@ function Clients() {
             <div className="clients-list">
                 {clients.length > 0 ? (
                     clients.map((client) => (
-                        <RegisterClient key={client.id} client={client} />
+                        <RegisterClient key={client.id_User} client={client} />
                     ))
                 ) : (
                     <p>No hay clientes registrados.</p>

@@ -58,9 +58,9 @@ const ClientsForm = ({ onSubmit }) => {
 
 
     return (
-        <form onSubmit={handleFormSubmit}>
+        <form onSubmit={handleFormSubmit} className='formClient'>
             <div className='formDivClients1'>
-                <div>
+                <div className='divData'>
                     <label htmlFor="iNombre">Nombre:</label>
                     <input
                         type="text"
@@ -72,7 +72,7 @@ const ClientsForm = ({ onSubmit }) => {
                     />
                 </div>
 
-                <div>
+                <div className='divData'>
                     <label htmlFor="iApellidoPat">Apellido Paterno:</label>
                     <input
                         type="text"
@@ -84,7 +84,7 @@ const ClientsForm = ({ onSubmit }) => {
                     />
                 </div>
 
-                <div>
+                <div className='divData'>
                     <label htmlFor="iApellidoMat">Apellido Materno:</label>
                     <input
                         type="text"
@@ -98,7 +98,7 @@ const ClientsForm = ({ onSubmit }) => {
             </div>
 
             <div className='formDivClients2'>
-                <div>
+                <div className='divData'>
                     <label htmlFor="iPhone">Teléfono:</label>
                     <input
                         type="text"
@@ -111,7 +111,7 @@ const ClientsForm = ({ onSubmit }) => {
                     />
                 </div>
 
-                <div>
+                <div className='divData'>
                     <label htmlFor="iEmail">Correo Electrónico:</label>
                     <input
                         type="email"
@@ -123,7 +123,7 @@ const ClientsForm = ({ onSubmit }) => {
                     />
                 </div>
 
-                <div>
+                <div className='divData'>
                     <label htmlFor="iPassword">Contraseña:</label>
                     <input
                         type="text"
@@ -137,7 +137,8 @@ const ClientsForm = ({ onSubmit }) => {
 
                 
             </div>
-            <button type="submit">Agregar</button>
+            <button type="submit" className='btn-submit'>Agregar</button>
+            <br />
         </form>
     );
 };
