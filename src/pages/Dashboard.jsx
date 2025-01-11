@@ -35,7 +35,10 @@ function Dashboard({setSelectedPlatform}) {
     ];
 
     const handleNavigation = (platform) => {
-        setSelectedPlatform(platform.id);
+        setSelectedPlatform({
+            id: platform.id,
+            name: platform.name
+        });
         navigate(platform.path);
     };
 

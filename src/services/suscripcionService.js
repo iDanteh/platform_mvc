@@ -19,3 +19,13 @@ export const getSubscription = async () => {
         return [];        
     }
 };
+
+export const sendWhatsAppMessage = async ({ to, message }) => {
+    try {
+        const response = await axiosInstance.post('/send-message', { to, message });
+        return response.data;
+    } catch (error) {
+        console.error('Error al enviar mensaje de WhatsApp:', error);
+        throw error;
+    }
+};

@@ -46,13 +46,17 @@ const SuscripcionForm = ({ selectedPlatform, setSelectedPlatform, userInfo }) =>
         // Construir el objeto JSON con los datos del formulario
         const formData = {
             fk_user: userInfo.id_User,
-            fk_Platform: selectedPlatform,
+            fk_Platform: selectedPlatform.id,
             perfil: perfil || profileSuggestion,
             password: password || passwordSuggestion,
             start_date: new Date().toISOString().split('T')[0],
             finish_date: finishDate,
             state: 'Activo',
-        };      
+            name_user: userInfo.name_user,
+            phone_user: userInfo.phone_user,
+            platform: selectedPlatform.name
+        };
+        console.log('Form data:', formData);
 
         // Llamar a la función del servicio para registrar la suscripción
         const response = await registerSubscription(formData);
@@ -77,7 +81,7 @@ const SuscripcionForm = ({ selectedPlatform, setSelectedPlatform, userInfo }) =>
                     <select 
                         name="platforms" 
                         id="plat-select" 
-                        value={selectedPlatform}
+                        value={selectedPlatform.id}
                         onChange={handleChange}>
                             <option value="">---Seleccionar plataforma---</option>
                             <option value="1">Netflix</option>
