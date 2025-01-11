@@ -52,9 +52,9 @@ const SuscripcionForm = ({ selectedPlatform, setSelectedPlatform, userInfo }) =>
             start_date: new Date().toISOString().split('T')[0],
             finish_date: finishDate,
             state: 'Activo',
-            name_user: userInfo.name_user,
             phone_user: userInfo.phone_user,
-            platform: selectedPlatform.name
+            platform: selectedPlatform.name,
+            name_user: userInfo.nombre_user,
         };
         console.log('Form data:', formData);
 

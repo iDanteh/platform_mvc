@@ -1,23 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { getSubscription, sendWhatsAppMessage } from '../services/suscripcionService';
-import { FaWhatsapp } from 'react-icons/fa'; // Importar el ícono de WhatsApp
+import { FaWhatsapp } from 'react-icons/fa';
+import Modal from '../components/Modal.jsx';
 import '../styles/TableSuscripciones.css';
 
 const TableSuscripciones = () => {
     const [subscriptions, setSubscriptions] = useState([]);
-    const [clickedRows, setClickedRows] = useState({}); // Estado para rastrear filas presionadas
+    const [clickedRows, setClickedRows] = useState(() => {
+        const savedState = localStorage.getItem('clickedRows');
+        return savedState ? JSON.parse(savedState) : {};
+    });
+
+    const [selectedSubscription, setSelectedSubscription] = useState(null); // Estado para el modal
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // Guardar estado en localStorage cada vez que se actualice
+    useEffect(() => {
+        localStorage.setItem('clickedRows', JSON.stringify(clickedRows));
+    }, [clickedRows]);
 
     // Obtener las suscripciones desde la API
     useEffect(() => {
         const fetchSubscriptions = async () => {
-            const response = await getSubscription();
-            if (response && Array.isArray(response)) {
-                setSubscriptions(response);
+            try {
+                const response = await getSubscription();
+                if (response && Array.isArray(response)) {
+                    setSubscriptions(response);
+                }
+            } catch (error) {
+                console.error('Error al obtener suscripciones:', error);
             }
         };
-
+    
         fetchSubscriptions();
     }, []);
+
+    const handleIconClick = (subscription) => {
+        setSelectedSubscription(subscription);
+        setIsModalOpen(true);
+    };
 
     // Función para calcular los días restantes
     const calculateDaysRemaining = (startDate, finishDate) => {
@@ -33,23 +54,34 @@ const TableSuscripciones = () => {
         return `${remainingDays} días`;
     };
 
-    // Función para manejar el clic en el ícono
-    const handleIconClick = async (subscription) => {
-        const phoneNumber = `521${subscription.phone_user}@c.us`;
-        const message = `Hola, información de tu suscripción:
-- Usuario: ${subscription.fk_user}
-- Plataforma: ${subscription.platform}
-- Perfil: ${subscription.perfil}
-- Contraseña: ${subscription.password}
-- Fecha de Inicio: ${new Date(subscription.start_date).toLocaleDateString()}
-- Fecha de Fin: ${new Date(subscription.finish_date).toLocaleDateString()}
-- Estado: ${subscription.state}`;
+    // Función para confirmar el envío del mensaje
+    const handleConfirmSendMessage = async () => {
+        if (selectedSubscription) {
+            const { id_Subscription, phone_user, fk_user, platform, perfil, password, start_date, finish_date, state, name_user } = selectedSubscription;
 
-        try {
-            await sendWhatsAppMessage({ to: phoneNumber, message });
-            setClickedRows((prev) => ({ ...prev, [subscription.id_Subscription]: true }));
-        } catch (error) {
-            console.error('Error al enviar el mensaje de WhatsApp:', error);
+            const phoneNumber = `521${phone_user}@c.us`;
+            const message = `Hola ${name_user}, aquí tienes la información de tu suscripción:
+                - Usuario: ${fk_user}
+                - Plataforma: ${platform}
+                - Perfil: ${perfil}
+                - Contraseña: ${password}
+                - Fecha de Inicio: ${new Date(start_date).toLocaleDateString()}
+                - Fecha de Fin: ${new Date(finish_date).toLocaleDateString()}
+                - Estado: ${state}`;
+
+            try {
+                await sendWhatsAppMessage({ to: phoneNumber, message });
+                setClickedRows((prev) => {
+                    const updatedRows = { ...prev, [id_Subscription]: true };
+                    localStorage.setItem('clickedRows', JSON.stringify(updatedRows)); // Actualizar localStorage
+                    return updatedRows;
+                });
+            } catch (error) {
+                console.error('Error al enviar el mensaje de WhatsApp:', error);
+            } finally {
+                setIsModalOpen(false); // Cerrar el modal
+                setSelectedSubscription(null);
+            }
         }
     };
 
@@ -67,7 +99,7 @@ const TableSuscripciones = () => {
                         <th>Fecha Fin</th>
                         <th>Estado</th>
                         <th>Días Restantes</th>
-                        <th>Acción</th> {/* Nueva columna */}
+                        <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -75,7 +107,7 @@ const TableSuscripciones = () => {
                         subscriptions.map((sub) => (
                             <tr key={sub.id_Subscription}>
                                 <td>{sub.phone_user}</td>
-                                <td>{sub.fk_user}</td>
+                                <td>{sub.name_user}</td>
                                 <td>{sub.platform}</td>
                                 <td>{sub.perfil}</td>
                                 <td>{sub.password}</td>
@@ -84,10 +116,8 @@ const TableSuscripciones = () => {
                                 <td>{sub.state}</td>
                                 <td>{calculateDaysRemaining(sub.start_date, sub.finish_date)}</td>
                                 <td>
-                                    <button
-                                        className={`icon-button ${
-                                            clickedRows[sub.id_Subscription] ? 'clicked' : ''
-                                        }`}
+                                <button
+                                        className={`icon-button ${clickedRows[sub.id_Subscription] ? 'clicked' : ''}`}
                                         onClick={() => handleIconClick(sub)}
                                     >
                                         <FaWhatsapp />
@@ -102,6 +132,16 @@ const TableSuscripciones = () => {
                     )}
                 </tbody>
             </table>
+
+            <Modal
+                isOpen={isModalOpen}
+                title="Confirmar Envío"
+                message="¿Deseas enviar un mensaje de WhatsApp a este usuario?"
+                onClose={() => setIsModalOpen(false)}
+                onConfirm={handleConfirmSendMessage}
+                showConfirmButton={true}
+                confirmText="Enviar"
+            />
         </div>
     );
 };
