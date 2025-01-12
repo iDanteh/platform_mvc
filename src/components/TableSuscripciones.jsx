@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { getSubscription, sendWhatsAppMessage } from '../services/suscripcionService';
-import { FaWhatsapp } from 'react-icons/fa';
+import { getSubscription, sendWhatsAppMessage, updateSubscription } from '../services/suscripcionService';
+import { FaWhatsapp, FaEdit  } from 'react-icons/fa';
 import Modal from '../components/Modal.jsx';
+import ModalUpdate from '../components/ModalUpdateSub.jsx'
 import '../styles/TableSuscripciones.css';
 
 const TableSuscripciones = () => {
@@ -10,14 +11,19 @@ const TableSuscripciones = () => {
         const savedState = localStorage.getItem('clickedRows');
         return savedState ? JSON.parse(savedState) : {};
     });
-
     const [selectedSubscription, setSelectedSubscription] = useState(null); // Estado para el modal
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false); // Estado para el modal de edición
+    const [updatedSubscription, setUpdatedSubscription] = useState(null); // Estado para la suscripción a editar
+
     // Guardar estado en localStorage cada vez que se actualice
     useEffect(() => {
-        localStorage.setItem('clickedRows', JSON.stringify(clickedRows));
-    }, [clickedRows]);
+        const savedState = localStorage.getItem('clickedRows');
+        if (savedState) {
+            setClickedRows(JSON.parse(savedState));
+        }
+    }, []); 
 
     // Obtener las suscripciones desde la API
     useEffect(() => {
@@ -26,6 +32,14 @@ const TableSuscripciones = () => {
                 const response = await getSubscription();
                 if (response && Array.isArray(response)) {
                     setSubscriptions(response);
+
+                    // Enviar recordatorios automáticos si los días restantes son menores a 3
+                    response.forEach((sub) => {
+                        const daysRemaining = calculateDaysRemaining(sub.start_date, sub.finish_date);
+                        if (daysRemaining && daysRemaining.includes('días') && parseInt(daysRemaining) < 3) {
+                            handleAutoReminder(sub);
+                        }
+                    });
                 }
             } catch (error) {
                 console.error('Error al obtener suscripciones:', error);
@@ -52,6 +66,33 @@ const TableSuscripciones = () => {
         const remainingDays = Math.ceil(remainingTime / (1000 * 60 * 60 * 24));
 
         return `${remainingDays} días`;
+    };
+
+    // Función para enviar un recordatorio automático
+    const handleAutoReminder = async (subscription) => {
+        const { id_Subscription, phone_user, name_user, start_date, finish_date } = subscription;
+        const phoneNumber = `521${phone_user}@c.us`;
+
+        // Comprobar si ya se envió un recordatorio a este usuario
+        const reminderKey = `reminderSent_${id_Subscription}`;
+        const reminderSent = localStorage.getItem(reminderKey);
+
+        if (reminderSent) {
+            console.log(`Recordatorio ya enviado a ${name_user}`);
+            return; // Si ya se envió, no hacer nada
+        }
+
+        const message = `Hola ${name_user}, te recordamos que tu suscripción está por finalizar en menos de 3 días. Fecha de fin: ${new Date(finish_date).toLocaleDateString()}.`;
+
+        try {
+            await sendWhatsAppMessage({ to: phoneNumber, message });
+            console.log('Recordatorio enviado a', name_user);
+
+            // Marcar que ya se ha enviado el recordatorio
+            localStorage.setItem(reminderKey, 'true');
+        } catch (error) {
+            console.error('Error al enviar el recordatorio de WhatsApp:', error);
+        }
     };
 
     // Función para confirmar el envío del mensaje
@@ -82,6 +123,32 @@ const TableSuscripciones = () => {
                 setIsModalOpen(false); // Cerrar el modal
                 setSelectedSubscription(null);
             }
+        }
+    };
+
+    const handleEditClick = (subscription) => {
+        console.log("Suscripción seleccionada para editar:", subscription);
+        if (subscription) {
+            setUpdatedSubscription(subscription); // Asegúrate de actualizar este estado
+            setIsUpdateModalOpen(true); // Luego abre el modal de edición
+        } else {
+            console.error("No se seleccionó ninguna suscripción");
+        }
+    };     
+
+    const handleUpdateSubscription = async (updatedData) => {
+        try {
+            const response = await updateSubscription(updatedData);
+            if (response) {
+                setSubscriptions((prev) =>
+                    prev.map((sub) =>
+                        sub.id_Subscription === updatedData.id_Subscription ? updatedData : sub
+                    )
+                );
+                setIsUpdateModalOpen(false);
+            }
+        } catch (error) {
+            console.error('Error al actualizar la suscripción:', error);
         }
     };
 
@@ -117,11 +184,17 @@ const TableSuscripciones = () => {
                                 <td>{calculateDaysRemaining(sub.start_date, sub.finish_date)}</td>
                                 <td>
                                 <button
-                                        className={`icon-button ${clickedRows[sub.id_Subscription] ? 'clicked' : ''}`}
-                                        onClick={() => handleIconClick(sub)}
+                                            className="icon-button"
+                                            onClick={() => handleEditClick(sub)}
                                     >
-                                        <FaWhatsapp />
+                                            <FaEdit />
                                     </button>
+                                    <button
+                                            className={`icon-button ${clickedRows[sub.id_Subscription] ? 'clicked' : ''}`}
+                                            onClick={() => handleIconClick(sub)}
+                                        >
+                                            <FaWhatsapp />
+                                        </button>
                                 </td>
                             </tr>
                         ))
@@ -141,6 +214,13 @@ const TableSuscripciones = () => {
                 onConfirm={handleConfirmSendMessage}
                 showConfirmButton={true}
                 confirmText="Enviar"
+            />
+
+            <ModalUpdate
+                isOpen={isUpdateModalOpen}
+                subscription={updatedSubscription}
+                onClose={() => setIsUpdateModalOpen(false)}
+                onUpdate={handleUpdateSubscription}
             />
         </div>
     );

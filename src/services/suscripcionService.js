@@ -29,3 +29,16 @@ export const sendWhatsAppMessage = async ({ to, message }) => {
         throw error;
     }
 };
+
+export const updateSubscription = async (id_Subscription, formData) => {
+    try {
+        // Verifica que el ID sea un número o una cadena válida
+        console.log('ID que se envía:', id_Subscription);
+
+        const response = await axiosInstance.put(`/suscriptions/${id_Subscription}`, formData);
+        return response.data;
+    } catch (error) {
+        console.error('Error al actualizar la suscripción:', error);
+        throw error;
+    }
+};
