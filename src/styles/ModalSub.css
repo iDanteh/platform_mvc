@@ -1,4 +1,5 @@
-/* Modal overlay */
+
+/* Modal overlay 
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -12,7 +13,7 @@
     z-index: 1000;
 }
 
-/* Modal content */
+/* Modal content 
 .modal-content {
     background: #ffffff;
     padding: 2rem;
@@ -23,7 +24,7 @@
     animation: fadeIn 0.3s ease-in-out;
 }
 
-/* Form styles */
+/* Form styles 
 form {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -90,7 +91,7 @@ form button[type="button"]:hover {
     background-color: #5a6268;
 }
 
-/* Modal header */
+/* Modal header 
 .modal-content h2 {
     grid-column: span 2;
     margin-bottom: 1rem;
@@ -99,7 +100,7 @@ form button[type="button"]:hover {
     text-align: center;
 }
 
-/* Animation */
+/* Animation 
 @keyframes fadeIn {
     from {
         opacity: 0;

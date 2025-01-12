@@ -68,6 +68,13 @@
     display: flex;
     width: auto;
     margin-bottom: 10px;
+    z-index: 9999;
+}
+.clients .client-item:hover{
+    cursor: pointer;
+}
+.clients .client-item img:hover{
+    cursor: pointer;
 }
 .clients .client-item span{
     width: 97%; 
@@ -84,12 +91,17 @@
     background-color: #949090;
 }
 .clients .modal-info-client{
-    width: 380px;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    width: 420px;
     height: 150px;
     background-color: white;
     border-radius: 10px;
     text-align: center;
     align-items: center;
+    margin-left: 15%;
+    z-index: 9999;
 }
 .clients .modal-info-client button{
     font-size: 16px;
@@ -104,4 +116,8 @@
 }
 .clients .modal-info-client button:hover{
     background-color: #949090;
+    cursor: pointer;
+}
+.clients .modal-info-client input{
+    font-size: 12px;
 }
