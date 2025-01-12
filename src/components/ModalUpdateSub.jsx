@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { updateSubscription } from '../services/suscripcionService';
-import '../styles/ModalSub.css';
 
 const ModalUpdateSub = ({ isOpen, subscription, onClose, onUpdate }) => {
     const [formData, setFormData] = useState({
@@ -69,8 +68,8 @@ const ModalUpdateSub = ({ isOpen, subscription, onClose, onUpdate }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
+        <div className="modal_update_sub">
+            <div className="modal_update">
                 <h2>Actualizar Suscripción</h2>
                 <form onSubmit={handleSubmit}>
                     <label>

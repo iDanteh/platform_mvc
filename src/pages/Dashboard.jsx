@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getSubscription, calculateDaysRemaining, sendWhatsAppMessage, handleAutoReminder} from '../services/suscripcionService.js'
 import NetflixLogo from '../assets/svg/netflix-3.svg';
 import OfficeLogo from '../assets/svg/office-2.svg';
 import HBOLogo from '../assets/svg/hbo-4.svg';
@@ -41,6 +42,19 @@ function Dashboard({setSelectedPlatform}) {
         });
         navigate(platform.path);
     };
+
+    // Envía los mensajes de recordatorio desde el Dashboard
+    useEffect(() => {
+        const fetchSubscriptions = async () => {
+            const subscriptions = await getSubscription();
+            subscriptions.forEach(async (subscription) => {
+                // Llama a handleAutoReminder para cada suscripción
+                await handleAutoReminder(subscription, sendWhatsAppMessage);
+            });
+        };
+
+        fetchSubscriptions();
+    }, []);
 
     return (
         <div className="dashboard">

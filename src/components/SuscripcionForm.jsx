@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { generateProfileSuggestion, generatePasswordSuggestion } from '../utils/formUtils'
-import { registerSubscription } from '../services/suscripcionService';
+import { registerSubscription, getSubscription } from '../services/suscripcionService';
 import Modal from '../components/Modal.jsx';
 
 const SuscripcionForm = ({ selectedPlatform, setSelectedPlatform, userInfo }) => {
@@ -10,12 +10,28 @@ const SuscripcionForm = ({ selectedPlatform, setSelectedPlatform, userInfo }) =>
 
     const [profileSuggestion, setProfileSuggestion] = useState('');
     const [passwordSuggestion, setPasswordSuggestion] = useState('');
+    const [subscriptions, setSubscriptions] = useState([]);
 
     // Estado del modal
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
     const [modalMessage, setModalMessage] = useState('');
     const [showConfirmButton, setShowConfirmButton] = useState(false);
+
+    // ✅ Extrae loadSubscriptions
+    const loadSubscriptions = async () => {
+        const data = await getSubscription();
+        if (!data.error) {
+            setSubscriptions(data);
+        } else {
+            console.error('Error loading subscriptions:', data.message);
+        }
+    };
+
+    // ✅ Llama a loadSubscriptions dentro del useEffect para cargar las suscripciones al inicio
+    useEffect(() => {
+        loadSubscriptions();
+    }, []);
 
     // Genera sugerencias de perfil y contraseña en tiempo real
     useEffect(() => {
@@ -28,7 +44,10 @@ const SuscripcionForm = ({ selectedPlatform, setSelectedPlatform, userInfo }) =>
     }, [userInfo]);
 
     const handleChange = (e) => {
-        setSelectedPlatform(e.target.value);
+        const platformId = e.target.value;
+        const platformName = e.target.options[e.target.selectedIndex].text;
+    
+        setSelectedPlatform({ id: platformId, name: platformName });
     };    
 
     const handleSubmit = async (e) => {
@@ -43,6 +62,14 @@ const SuscripcionForm = ({ selectedPlatform, setSelectedPlatform, userInfo }) =>
             return;
         }
 
+        if (!selectedPlatform?.id) {
+            setModalTitle('Error');
+            setModalMessage('Por favor, selecciona una plataforma.');
+            setShowConfirmButton(false);
+            setModalIsOpen(true);
+            return;
+        }
+
         // Construir el objeto JSON con los datos del formulario
         const formData = {
             fk_user: userInfo.id_User,
@@ -51,10 +78,11 @@ const SuscripcionForm = ({ selectedPlatform, setSelectedPlatform, userInfo }) =>
             password: password || passwordSuggestion,
             start_date: new Date().toISOString().split('T')[0],
             finish_date: finishDate,
-            state: 'Activo',
+            state: 'ACTIVO',
             phone_user: userInfo.phone_user,
             platform: selectedPlatform.name,
             name_user: userInfo.nombre_user,
+            email: userInfo.email
         };
         console.log('Form data:', formData);
 
@@ -68,8 +96,10 @@ const SuscripcionForm = ({ selectedPlatform, setSelectedPlatform, userInfo }) =>
         } else {
             setModalTitle('Éxito');
             setModalMessage('Suscripción registrada con éxito.');
+            await loadSubscriptions();
             setShowConfirmButton(true);
         }
+    
         setModalIsOpen(true); // Abrir el modal
     };
 
@@ -81,7 +111,7 @@ const SuscripcionForm = ({ selectedPlatform, setSelectedPlatform, userInfo }) =>
                     <select 
                         name="platforms" 
                         id="plat-select" 
-                        value={selectedPlatform.id}
+                        value={selectedPlatform?.id || ''}
                         onChange={handleChange}>
                             <option value="">---Seleccionar plataforma---</option>
                             <option value="1">Netflix</option>

@@ -180,3 +180,90 @@
 .icon-button.clicked {
     color: green;
 }
+
+/* Estilo general del modal */
+.modal_update_sub {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal_update {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal_update h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Formulario en dos columnas */
+.modal_update form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Ajuste de los labels e inputs */
+.modal_update label {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    color: #333;
+}
+
+.modal_update input,
+.modal_update select {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Estilo de los botones */
+.modal_update button {
+    padding: 10px 15px;
+    font-size: 16px;
+    color: white;
+    background-color: #8026a1ad;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    grid-column: span 2;
+}
+
+.modal_update button[type="button"] {
+    background-color: #ccc;
+}
+
+.modal_update button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}

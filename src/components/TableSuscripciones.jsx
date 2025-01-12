@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getSubscription, sendWhatsAppMessage, updateSubscription } from '../services/suscripcionService';
+import { getSubscription, sendWhatsAppMessage, updateSubscription, calculateDaysRemaining, handleAutoReminder, useLocalStorage } from '../services/suscripcionService';
 import { FaWhatsapp, FaEdit  } from 'react-icons/fa';
 import Modal from '../components/Modal.jsx';
 import ModalUpdate from '../components/ModalUpdateSub.jsx'
@@ -7,37 +7,22 @@ import '../styles/TableSuscripciones.css';
 
 const TableSuscripciones = () => {
     const [subscriptions, setSubscriptions] = useState([]);
-    const [clickedRows, setClickedRows] = useState(() => {
-        const savedState = localStorage.getItem('clickedRows');
-        return savedState ? JSON.parse(savedState) : {};
-    });
-    const [selectedSubscription, setSelectedSubscription] = useState(null); // Estado para el modal
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [clickedRows, setClickedRows] = useLocalStorage('clickedRows', {});
+    const [selectedSubscription, setSelectedSubscription] = useState(null);
+    const [modals, setModals] = useState({ isModalOpen: false, isUpdateModalOpen: false });
 
-    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false); // Estado para el modal de edición
-    const [updatedSubscription, setUpdatedSubscription] = useState(null); // Estado para la suscripción a editar
+    const [updatedSubscription, setUpdatedSubscription] = useState(null);
 
-    // Guardar estado en localStorage cada vez que se actualice
-    useEffect(() => {
-        const savedState = localStorage.getItem('clickedRows');
-        if (savedState) {
-            setClickedRows(JSON.parse(savedState));
-        }
-    }, []); 
-
-    // Obtener las suscripciones desde la API
     useEffect(() => {
         const fetchSubscriptions = async () => {
             try {
                 const response = await getSubscription();
                 if (response && Array.isArray(response)) {
                     setSubscriptions(response);
-
-                    // Enviar recordatorios automáticos si los días restantes son menores a 3
                     response.forEach((sub) => {
-                        const daysRemaining = calculateDaysRemaining(sub.start_date, sub.finish_date);
-                        if (daysRemaining && daysRemaining.includes('días') && parseInt(daysRemaining) < 3) {
-                            handleAutoReminder(sub);
+                        const daysRemaining = parseInt(calculateDaysRemaining(sub.start_date, sub.finish_date));
+                        if (!isNaN(daysRemaining) && daysRemaining > 0 && daysRemaining < 3) {
+                            handleAutoReminder(sub, sendWhatsAppMessage);
                         }
                     });
                 }
@@ -47,94 +32,38 @@ const TableSuscripciones = () => {
         };
     
         fetchSubscriptions();
-    }, []);
+    }, []);    
 
     const handleIconClick = (subscription) => {
         setSelectedSubscription(subscription);
-        setIsModalOpen(true);
+        setModals({ ...modals, isModalOpen: true });
     };
 
-    // Función para calcular los días restantes
-    const calculateDaysRemaining = (startDate, finishDate) => {
-        const start = new Date(startDate);
-        const end = new Date(finishDate);
-        const today = new Date();
-
-        if (end < today) return 'Vencida';
-
-        const remainingTime = end - today;
-        const remainingDays = Math.ceil(remainingTime / (1000 * 60 * 60 * 24));
-
-        return `${remainingDays} días`;
+    const handleEditClick = (subscription) => {
+        setUpdatedSubscription(subscription);
+        setModals({ ...modals, isUpdateModalOpen: true });
     };
 
-    // Función para enviar un recordatorio automático
-    const handleAutoReminder = async (subscription) => {
-        const { id_Subscription, phone_user, name_user, start_date, finish_date } = subscription;
-        const phoneNumber = `521${phone_user}@c.us`;
-
-        // Comprobar si ya se envió un recordatorio a este usuario
-        const reminderKey = `reminderSent_${id_Subscription}`;
-        const reminderSent = localStorage.getItem(reminderKey);
-
-        if (reminderSent) {
-            console.log(`Recordatorio ya enviado a ${name_user}`);
-            return; // Si ya se envió, no hacer nada
-        }
-
-        const message = `Hola ${name_user}, te recordamos que tu suscripción está por finalizar en menos de 3 días. Fecha de fin: ${new Date(finish_date).toLocaleDateString()}.`;
-
-        try {
-            await sendWhatsAppMessage({ to: phoneNumber, message });
-            console.log('Recordatorio enviado a', name_user);
-
-            // Marcar que ya se ha enviado el recordatorio
-            localStorage.setItem(reminderKey, 'true');
-        } catch (error) {
-            console.error('Error al enviar el recordatorio de WhatsApp:', error);
-        }
-    };
-
-    // Función para confirmar el envío del mensaje
     const handleConfirmSendMessage = async () => {
         if (selectedSubscription) {
-            const { id_Subscription, phone_user, fk_user, platform, perfil, password, start_date, finish_date, state, name_user } = selectedSubscription;
-
+            const { id_Subscription, phone_user, name_user, start_date, finish_date, platform, perfil, password, state, email } = selectedSubscription;
             const phoneNumber = `521${phone_user}@c.us`;
-            const message = `Hola ${name_user}, aquí tienes la información de tu suscripción:
-                - Usuario: ${fk_user}
-                - Plataforma: ${platform}
-                - Perfil: ${perfil}
-                - Contraseña: ${password}
-                - Fecha de Inicio: ${new Date(start_date).toLocaleDateString()}
-                - Fecha de Fin: ${new Date(finish_date).toLocaleDateString()}
-                - Estado: ${state}`;
+            const message = `Hola ${name_user}, aquí tienes la información de tu suscripción:\n- Usuario: ${name_user}\n- Correo: ${email}\n- Plataforma: ${platform}\n- Perfil: ${perfil}\n- Contraseña: ${password}\n- Fecha de Inicio: ${new Date(start_date).toLocaleDateString()}\n- Fecha de Fin: ${new Date(finish_date).toLocaleDateString()}\n- Estado: ${state}`;
 
             try {
                 await sendWhatsAppMessage({ to: phoneNumber, message });
                 setClickedRows((prev) => {
                     const updatedRows = { ...prev, [id_Subscription]: true };
-                    localStorage.setItem('clickedRows', JSON.stringify(updatedRows)); // Actualizar localStorage
                     return updatedRows;
                 });
             } catch (error) {
                 console.error('Error al enviar el mensaje de WhatsApp:', error);
             } finally {
-                setIsModalOpen(false); // Cerrar el modal
+                setModals({ ...modals, isModalOpen: false });
                 setSelectedSubscription(null);
             }
         }
     };
-
-    const handleEditClick = (subscription) => {
-        console.log("Suscripción seleccionada para editar:", subscription);
-        if (subscription) {
-            setUpdatedSubscription(subscription); // Asegúrate de actualizar este estado
-            setIsUpdateModalOpen(true); // Luego abre el modal de edición
-        } else {
-            console.error("No se seleccionó ninguna suscripción");
-        }
-    };     
 
     const handleUpdateSubscription = async (updatedData) => {
         try {
@@ -145,7 +74,7 @@ const TableSuscripciones = () => {
                         sub.id_Subscription === updatedData.id_Subscription ? updatedData : sub
                     )
                 );
-                setIsUpdateModalOpen(false);
+                setModals({ ...modals, isUpdateModalOpen: false });
             }
         } catch (error) {
             console.error('Error al actualizar la suscripción:', error);
@@ -158,7 +87,8 @@ const TableSuscripciones = () => {
                 <thead>
                     <tr>
                         <th>Teléfono</th>
-                        <th>Usuario</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
                         <th>Plataforma</th>
                         <th>Perfil</th>
                         <th>Contraseña</th>
@@ -175,6 +105,7 @@ const TableSuscripciones = () => {
                             <tr key={sub.id_Subscription}>
                                 <td>{sub.phone_user}</td>
                                 <td>{sub.name_user}</td>
+                                <td>{sub.email}</td>
                                 <td>{sub.platform}</td>
                                 <td>{sub.perfil}</td>
                                 <td>{sub.password}</td>
@@ -207,19 +138,19 @@ const TableSuscripciones = () => {
             </table>
 
             <Modal
-                isOpen={isModalOpen}
+                isOpen={modals.isModalOpen}
                 title="Confirmar Envío"
                 message="¿Deseas enviar un mensaje de WhatsApp a este usuario?"
-                onClose={() => setIsModalOpen(false)}
+                onClose={() => setModals({ ...modals, isModalOpen: false })}
                 onConfirm={handleConfirmSendMessage}
                 showConfirmButton={true}
                 confirmText="Enviar"
             />
 
             <ModalUpdate
-                isOpen={isUpdateModalOpen}
+                isOpen={modals.isUpdateModalOpen}
                 subscription={updatedSubscription}
-                onClose={() => setIsUpdateModalOpen(false)}
+                onClose={() => setModals({ ...modals, isUpdateModalOpen: false })}
                 onUpdate={handleUpdateSubscription}
             />
         </div>
