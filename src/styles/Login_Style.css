@@ -1,5 +1,5 @@
 body {
-    /*display: flex;*/
+    display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
@@ -9,11 +9,12 @@ body {
     background-repeat: no-repeat;
 }
 
-.login-container{
-    position: fixed;
+.login-container {
+    display: flex;
+    flex-direction: row; /* Cambié a fila para mostrar el formulario y QR en línea */
     justify-content: center;
     align-items: center;
-    width: 450px;
+    width: 900px; /* Ajusta el tamaño según lo que necesites */
     background-color: transparent;
     backdrop-filter: blur(20px);
     border-radius: 15px;
@@ -21,26 +22,25 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
     color: rgb(0, 0, 0);
     padding: 30px 40px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    max-width: 100%;
+    height: auto;
 }
 
-.login-container h1{
+.login-container h1 {
     font-size: 2rem;
     font-weight: bold;
     text-align: center;
     margin-bottom: 20px;
 }
 
-.login-container .input-box{
+.login-container .input-box {
     position: relative;
     width: 100%;
     height: 40px;
     margin: 50px 0;
 }
 
-.input-box input{
+.input-box input {
     width: 100%;
     height: 100%;
     background: transparent;
@@ -53,7 +53,7 @@ body {
     padding-left: 10px;
 }
 
-.input-box label{
+.input-box label {
     position: relative;
     top: 0;
     left: 0;
@@ -64,11 +64,11 @@ body {
     transition: 0.5s;
 }
 
-.input-box input::placeholder{
+.input-box input::placeholder {
     color: rgb(90, 88, 88);
 }
 
-.input-box .icon{
+.input-box .icon {
     position: absolute;
     right: 20px;
     top: 100%;
@@ -85,7 +85,7 @@ body {
 
 .checkbox-container {
     display: flex;
-    align-items: center; 
+    align-items: center;
 }
 
 .checkbox-container input {
@@ -111,8 +111,7 @@ body {
     text-decoration: underline;
 }
 
-
-.login-container button{
+.login-container button {
     width: 100%;
     height: 40px;
     background: transparent;
@@ -123,4 +122,26 @@ body {
     cursor: pointer;
     font-size: 15px;
     font-weight: 600;
+}
+
+.qr-container {
+    margin-left: 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.qr-container h2 {
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    color: #060606;
+}
+
+.qr-container .whatsapp-icon {
+    font-size: 50px; /* Ajusta el tamaño del ícono */
+    color: #25D366;  /* Color típico de WhatsApp */
+    margin-top: 20px;
+    cursor: pointer;
 }
