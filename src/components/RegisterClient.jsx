@@ -1,9 +1,12 @@
 import React, {useState} from 'react';
 
-function RegisterClient({ client, updateDataClient }) {
+function RegisterClient({ client, onUpdateClient, onDeleteClient }) {
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [informacionModal, setInfoModal] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [editData, setEditData] = useState(false);
     const [editClient, setEditClient] = useState(client);
+    const [deleClient, setDelClient] = useState(client);
 
     const handleInfoClient = () => setInfoModal(true);
     const handleCloseInfoClient = () => {
@@ -11,6 +14,7 @@ function RegisterClient({ client, updateDataClient }) {
 
 
     const handleEdit = () => setEditData(true);
+
     const handleChange = (e) => {
         const {name,value} = e.target;
         setEditClient((prev) => ({...prev,[name]:value}));
@@ -18,16 +22,32 @@ function RegisterClient({ client, updateDataClient }) {
 
 
     const handleUpdateClient = () => {
-        updateDataClient(editClient);
+        onUpdateClient(editClient);
         setEditData(false);
         setInfoModal(false);
     }
+
+    const handleDeleteClick = () => {
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = () => {
+        onDeleteClient(deleClient);
+        setIsDeleteModalOpen(false);
+    };
+
+    const handleCancelDelete = () => {
+        setIsDeleteModalOpen(false);
+    };
 
     return (
         <>
             <div className="client-item" onClick={handleInfoClient}>
                 <span>{`${client.nombre_user} ${client.apellido_pat} ${client.apellido_mat}`}</span>
-                <button className='btn-icon-trash'>
+                <button className='btn-icon-trash'onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteClick();
+                }}>
                     <img src="../src/assets/svg/bxs-trash-alt.svg"/>
                 </button>
             </div>
@@ -96,6 +116,18 @@ function RegisterClient({ client, updateDataClient }) {
                     </div>
                 </div>
             )}
+
+            {isDeleteModalOpen && (
+                <div className="modal-delete">
+                    <div className="modal-del">
+                        <p>¿Estás seguro de que deseas eliminar a {client.nombre_user}?</p>
+                        <button onClick={handleConfirmDelete}>Sí</button>
+                        <button onClick={handleCancelDelete}>No</button>
+                    </div>
+                </div>
+            )}
+
+
         </>
     );
 }
