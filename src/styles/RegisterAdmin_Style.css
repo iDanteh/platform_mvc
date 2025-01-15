@@ -1,0 +1,23 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.div-register-admin input{
+    border-radius: 10px;
+    font-size: 18px;
+}
+.div-register-admin .btn-register-admin{
+    font-size: 16px;
+    border-radius: 10px;
+    height: 30px;
+    width: 180px;
+    background: #3f58d5;
+    color: white;
+    margin-left: 50px;
+    border-style: none;
+    box-shadow: 0 2px 2px black;
+}
+.div-register-admin .btn-register-admin:hover{
+    background: #6a77b8;
+    cursor: pointer;
+}

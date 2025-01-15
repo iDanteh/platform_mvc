@@ -1,9 +1,10 @@
 body {
-    display: flex;
+    /*display: flex;*/
     justify-content: center;
+    position: absolute;
     align-items: center;
     min-height: 100vh;
-    margin: 0;
+    /*margin: 0;*/
     background-image: url("../assets/images/back2.jpg");
     background-size: cover;
     background-repeat: no-repeat;

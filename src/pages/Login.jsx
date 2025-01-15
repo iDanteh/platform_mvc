@@ -99,7 +99,7 @@ function Login() {
                             <label htmlFor="remember">Recordar contraseña?</label>
                         </div>
                         <div className='register-link'>
-                            <p>No te has registrado? <a href="/dashboard">Registrarse</a></p>
+                            <p>No te has registrado? <span onClick={() => navigate('/RegisterAdmin')}>Registrarse</span></p>
                         </div>
                     </div>
 
