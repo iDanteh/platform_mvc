@@ -5,7 +5,7 @@ import Dashboard from "../pages/Dashboard.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import Clients from "../pages/Clients.jsx";
 import Suscripciones from '../pages/Suscripciones.jsx';
-import RegisterAdmin from "../pages/RegisterADmin.jsx";
+import RegisterAdmin from "../pages/RegisterAdmin.jsx";
 
 function Logout() {
     const { logout } = useAuth();

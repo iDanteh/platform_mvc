@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TiUser } from 'react-icons/ti';
 import { TbPasswordUser } from 'react-icons/tb';
-import { FaWhatsapp } from 'react-icons/fa';
+import { FaWhatsapp, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { authServiceLogin, useSocket } from '../services/authService.js';
 import { useAuth } from '../context/AuthContext.jsx';
@@ -15,9 +15,9 @@ function Login() {
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false); // Nuevo estado
     const navigate = useNavigate();
 
-    // ✅ Cargar correo y contraseña guardados al inicio
     useEffect(() => {
         const savedEmail = localStorage.getItem('rememberEmail');
         const savedPassword = localStorage.getItem('rememberPassword');
@@ -29,7 +29,6 @@ function Login() {
         }
     }, []);
 
-    // ✅ Manejar el inicio de sesión
     const handleLogin = async (event) => {
         event.preventDefault();
 
@@ -41,7 +40,6 @@ function Login() {
         try {
             const response = await authServiceLogin(email, password);
             if (response) {
-                // ✅ Guardar las credenciales si "Recordar contraseña" está activado
                 if (rememberMe) {
                     localStorage.setItem('rememberEmail', email);
                     localStorage.setItem('rememberPassword', password);
@@ -81,12 +79,22 @@ function Login() {
                     <div className='input-box'>
                         <label htmlFor="contraseña">Contraseña</label>
                         <input
-                            type="password"
+                            type={showPassword ? 'text' : 'password'}
                             placeholder='password123'
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
-                        <TbPasswordUser className='icon' />
+                        {showPassword ? (
+                            <FaEyeSlash
+                                className="icon"
+                                onClick={() => setShowPassword(false)}
+                            />
+                        ) : (
+                            <FaEye
+                                className="icon"
+                                onClick={() => setShowPassword(true)}
+                            />
+                        )}
                     </div>
 
                     <div className='check-box'>
@@ -99,7 +107,7 @@ function Login() {
                             <label htmlFor="remember">Recordar contraseña?</label>
                         </div>
                         <div className='register-link'>
-                            <p>No te has registrado? <span onClick={() => navigate('/RegisterAdmin')}>Registrarse</span></p>
+                            <p>No te has registrado? <span onClick={() => navigate('/register')}>Registrarse</span></p>
                         </div>
                     </div>
 

@@ -42,7 +42,7 @@ const ModalUpdateSub = ({ isOpen, subscription, onClose, onUpdate }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (isSubmitting) return; // Previene doble envío
+        if (isSubmitting) return;
         setIsSubmitting(true);
 
         console.log('handleSubmit ejecutado', subscription);
