@@ -105,6 +105,7 @@ function Login() {
                                 onChange={(e) => setRememberMe(e.target.checked)}
                             />
                             <label htmlFor="remember">Recordar contraseña?</label>
+                            <br />
                         </div>
                         <div className='register-link'>
                             <p>No te has registrado? <span onClick={() => navigate('/register')}>Registrarse</span></p>

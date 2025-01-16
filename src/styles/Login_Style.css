@@ -25,6 +25,8 @@ body {
     padding: 30px 40px;
     max-width: 100%;
     height: auto;
+    margin-left: 40%;
+    margin-top: 15%;
 }
 
 .login-container h1 {
@@ -110,6 +112,9 @@ body {
 
 .register-link p a:hover {
     text-decoration: underline;
+}
+.register-link span{
+    cursor: pointer;
 }
 
 .login-container button {

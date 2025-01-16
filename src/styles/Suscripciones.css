@@ -19,7 +19,8 @@
 /* Encabezado */
 .regSuscripcion-container h1 {
     font-size: 35px;
-    color: #333;
+    /*color: #333;*/
+    color: #f8f8f8;
     margin-bottom: 20px;
 }
 

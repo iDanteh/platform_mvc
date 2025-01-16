@@ -3,9 +3,9 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/Login.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
-import Clients from "../pages/Clients.jsx";
+import Clients from "../pages/Clients.jsx";     
 import Suscripciones from '../pages/Suscripciones.jsx';
-import RegisterAdmin from "../pages/RegisterAdmin.jsx";
+import RegisterAdmin from '../pages/RegisterAdmin.jsx';
 
 function Logout() {
     const { logout } = useAuth();
@@ -34,7 +34,7 @@ function AppRouter() {
             ) : (
                 <>
                     <Route path="/" element={<Login />} />
-                    <Route path="/register" element={<RegisterAdmin />}></Route>
+                    <Route path="/register" element={<RegisterAdmin />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </>
             )}
