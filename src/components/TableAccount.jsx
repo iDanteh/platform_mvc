@@ -1,31 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { getSubscriptionNameUser } from '../services/suscripcionService';
+import useSearchSubs from '../utils/useSearchSubs'; // Importa el hook aquí
 
-const TableAccount = ({userName}) => {
+const TableAccount = ({ userName }) => {
     const [subscriptions, setSubscriptions] = useState([]);
+    const { searchResults, isLoading, error } = useSearchSubs(userName);
 
     useEffect(() => {
-        const fetchSubscriptions = async (name) => {
-            try {
-                const response = await getSubscriptionNameUser(name);
-                if (response && Array.isArray(response)) {
-                    setSubscriptions(response);
-                } else {
-                    console.error('Error formato inválido');
-                }
-            } catch (error) {
-                console.error('Error al obtener las suscripciones:', error);
-            }
-        };
-
-        if (userName) {
-            fetchSubscriptions(userName);
+        if (searchResults && Array.isArray(searchResults)) {
+            setSubscriptions(searchResults);
         }
-    }, [userName]);    
+    }, [searchResults]);
 
     return (
         <div className="table-container">
-            <h3>Suscipciones de { userName || '...'}</h3>
+            <h3>Suscripciones de {userName || '...'}</h3>
+            {isLoading && <p>Cargando...</p>}
+            {error && <p>{error}</p>}
             <table className="table-accounts">
                 <thead>
                     <tr>
@@ -55,6 +45,7 @@ const TableAccount = ({userName}) => {
                 </tbody>
             </table>
         </div>
-    )
+    );
 };
+
 export default TableAccount;

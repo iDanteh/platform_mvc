@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import '../styles/Account_Style.css';
 import TableAccount from '../components/TableAccount.jsx';
-import useSearchUsers from '../utils/useSearchUsers.js';
+import useSearchSubs from '../utils/useSearchSubs.js';
 import { MdPersonSearch } from "react-icons/md";
-function Account(){
+
+function Account() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedUser, setSelectedUser] = useState(null);
-    const { searchResults, isLoading } = useSearchUsers(searchQuery);
+    const { searchResults, isLoading } = useSearchSubs(searchQuery);
 
     const handleSelectUser = (user) => {
         setSelectedUser(user);
-        setSearchQuery('');
+        setSearchQuery(''); 
     };
 
     return (
@@ -27,20 +28,21 @@ function Account(){
                 {Array.isArray(searchResults) && searchResults.length > 0 && (
                     <ul className='search-results'>
                         {searchResults.map(user => (
-                            <li key={user.id_User} onClick={() => handleSelectUser(user)}>
-                                {user.nombre_user}
+                            <li key={user.id_Subscription} onClick={() => handleSelectUser(user)}>
+                                {user.name_user}
                             </li>
                         ))}
                     </ul>
                 )}
             </div>
-            { selectedUser ? (
-                <TableAccount />
-            ):(
+
+            {selectedUser ? (
+                <TableAccount userName={selectedUser.name_user} />
+            ) : (
                 <p>Selecciona un usuario</p>
             )}
-            
         </div>
     );
 }
+
 export default Account;
