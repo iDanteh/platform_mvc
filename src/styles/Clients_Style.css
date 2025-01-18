@@ -6,8 +6,12 @@
     padding: 20px;
     flex: 1;
     transition: margin-left 0.3s ease;
-    margin-left: 25px;
-    margin-top: 50px;
+    margin-left: 38px;
+    margin-top: 18px;
+    gap: 25px;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .formClient{
     margin-bottom: 15px;
@@ -23,6 +27,7 @@
 }
 .clients h1{
     margin-left: 25px;
+    color: aliceblue;
 }
 .clients .divData{
     padding: 6px;
@@ -32,7 +37,9 @@
 }
 .clients label{
     margin-right: 5px;
-    width: 150px;
+    width: 160px;
+    color: solid black;
+    font-weight: 600;
 }
 .clients input{
     padding-left: 10px;

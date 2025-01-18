@@ -21,6 +21,16 @@ export const getSubscription = async () => {
     }
 };
 
+export const getSubscriptionNameUser = async () => {
+    try {
+        const response = await axiosInstance.get('/suscriptions/search');
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        return [];        
+    }
+};
+
 export const sendWhatsAppMessage = async ({ to, message }) => {
     try {
         const response = await axiosInstance.post('/send-message', { to, message });

@@ -1,0 +1,49 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+.div-account{
+    padding: 20px;
+    flex: 1;
+    transition: margin-left 0.3s ease;
+    margin-left: 65px;
+    margin-top: 10px;
+    gap: 25px;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.div-account h1{
+    color: aliceblue;
+}
+.div-account .search-container{
+    display: flex;
+    margin-right: 20px;
+    margin-left: 60%;
+    margin-bottom: 20px;
+}
+.search-container input {
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.search-container svg {
+    font-size: 24px;
+    color: #333;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.search-container button {
+    font-size: 16px;
+    border-radius: 20px;
+    padding: 8px 16px;
+    background-color: #8026a1ad;
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

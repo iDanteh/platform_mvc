@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import Clients from "../pages/Clients.jsx";     
 import Suscripciones from '../pages/Suscripciones.jsx';
 import RegisterAdmin from '../pages/RegisterAdmin.jsx';
+import Account from '../pages/Account.jsx';
 
 function Logout() {
     const { logout } = useAuth();
@@ -28,6 +29,7 @@ function AppRouter() {
                     <Route path="/dashboard" element={<Dashboard setSelectedPlatform={setSelectedPlatform} />} />
                     <Route path="/clients" element={<Clients />} />
                     <Route path="/suscripciones" element={<Suscripciones selectedPlatform={selectedPlatform} setSelectedPlatform={setSelectedPlatform} />} />
+                    <Route path="/cuentas" element={<Account />} />
                     <Route path="/logout" element={<Logout />} />
                     <Route path="/" element={<Navigate to="/dashboard" replace />} />
                 </>
