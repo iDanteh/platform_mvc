@@ -21,7 +21,7 @@ export const getSubscription = async () => {
     }
 };
 
-export const getSubscriptionNameUser = async () => {
+export const getSubscriptionNameUser = async (userId) => {
     try {
         const response = await axiosInstance.get('/suscriptions/search');
         return response.data;

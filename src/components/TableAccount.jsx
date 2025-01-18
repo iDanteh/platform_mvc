@@ -1,15 +1,36 @@
 import React, { useEffect, useState } from 'react';
-const TableAccount = () => {
+import { getSubscriptionNameUser } from '../services/suscripcionService';
 
+const TableAccount = ({userName}) => {
+    const [subscriptions, setSubscriptions] = useState([]);
+
+    useEffect(() => {
+        const fetchSubscriptions = async (name) => {
+            try {
+                const response = await getSubscriptionNameUser(name);
+                if (response && Array.isArray(response)) {
+                    setSubscriptions(response);
+                } else {
+                    console.error('Error formato inválido');
+                }
+            } catch (error) {
+                console.error('Error al obtener las suscripciones:', error);
+            }
+        };
+
+        if (userName) {
+            fetchSubscriptions(userName);
+        }
+    }, [userName]);    
 
     return (
         <div className="table-container">
+            <h3>Suscipciones de { userName || '...'}</h3>
             <table className="table-accounts">
                 <thead>
                     <tr>
                         <th>Nombre</th>
                         <th>Correo</th>
-                        <th>Contraseña Correo</th>
                         <th>Plataforma</th>
                         <th>Perfil</th>
                         <th>Contraseña</th>
@@ -35,5 +56,5 @@ const TableAccount = () => {
             </table>
         </div>
     )
-}
+};
 export default TableAccount;

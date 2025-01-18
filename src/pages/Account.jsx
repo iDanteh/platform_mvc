@@ -5,11 +5,11 @@ import useSearchUsers from '../utils/useSearchUsers.js';
 import { MdPersonSearch } from "react-icons/md";
 function Account(){
     const [searchQuery, setSearchQuery] = useState('');
-
+    const [selectedUser, setSelectedUser] = useState(null);
     const { searchResults, isLoading } = useSearchUsers(searchQuery);
 
     const handleSelectUser = (user) => {
-        setUserInfo(user);
+        setSelectedUser(user);
         setSearchQuery('');
     };
 
@@ -34,7 +34,12 @@ function Account(){
                     </ul>
                 )}
             </div>
-            <TableAccount />
+            { selectedUser ? (
+                <TableAccount />
+            ):(
+                <p>Selecciona un usuario</p>
+            )}
+            
         </div>
     );
 }
