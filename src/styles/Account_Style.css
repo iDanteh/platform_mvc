@@ -30,6 +30,31 @@
     margin-right: 10px;
 }
 
+.search-results {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.search-results li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+}
+
+.search-results li:last-child {
+    border-bottom: none;
+}
+
+.search-results li:hover {
+    background-color: #ddd;
+}
+
 .search-container svg {
     font-size: 24px;
     color: #333;

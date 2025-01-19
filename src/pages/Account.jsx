@@ -25,7 +25,10 @@ function Account() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <MdPersonSearch />
-                {Array.isArray(searchResults) && searchResults.length > 0 && (
+                <br />
+            </div>
+                <div>
+                    {Array.isArray(searchResults) && searchResults.length > 0 && (
                     <ul className='search-results'>
                         {searchResults.map(user => (
                             <li key={user.id_Subscription} onClick={() => handleSelectUser(user)}>
@@ -33,11 +36,11 @@ function Account() {
                             </li>
                         ))}
                     </ul>
-                )}
-            </div>
+                    )}
+                </div>
 
             {selectedUser ? (
-                <TableAccount userName={selectedUser.name_user} />
+                <TableAccount userName={selectedUser.name_user} userPass={selectedUser.password} />
             ) : (
                 <p>Selecciona un usuario</p>
             )}
