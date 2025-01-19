@@ -48,6 +48,7 @@ function Suscripciones({ selectedPlatform, setSelectedPlatform}) {
                     <div className='user-info'>
                         <p>Id: {userInfo.id_User}</p>
                         <p>Nombre: {userInfo.nombre_user}</p>
+                        <p>Apellidos: {userInfo.apellido_pat} {userInfo.apellido_mat}</p>
                         <p>Correo: {userInfo.email}</p>
                         <p>Teléfono: {userInfo.phone_user}</p>
                     </div>

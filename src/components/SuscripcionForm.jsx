@@ -18,7 +18,6 @@ const SuscripcionForm = ({ selectedPlatform, setSelectedPlatform, userInfo }) =>
     const [modalMessage, setModalMessage] = useState('');
     const [showConfirmButton, setShowConfirmButton] = useState(false);
 
-    // ✅ Extrae loadSubscriptions
     const loadSubscriptions = async () => {
         const data = await getSubscription();
         if (!data.error) {
@@ -28,7 +27,6 @@ const SuscripcionForm = ({ selectedPlatform, setSelectedPlatform, userInfo }) =>
         }
     };
 
-    // ✅ Llama a loadSubscriptions dentro del useEffect para cargar las suscripciones al inicio
     useEffect(() => {
         loadSubscriptions();
     }, []);

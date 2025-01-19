@@ -1,19 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import useSearchSubs from '../utils/useSearchSubs'; // Importa el hook aquí
+import useSearchSubs from '../utils/useSearchSubs'; 
+import useSearchUsers from '../utils/useSearchUsers';
 
-const TableAccount = ({ userName,userPassword}) => {
+const TableAccount = ({ userName, userInfo }) => {
     const [subscriptions, setSubscriptions] = useState([]);
-    const { searchResults, isLoading, error } = useSearchSubs(userName);
+    const [users, setUsers] = useState([]);
+    const { searchResults: subsResults, isLoading: subsLoading, error: subsError } = useSearchSubs(userName);
+    const { searchResults: usersResults, isLoading: usersLoading, error: usersError } = useSearchUsers(userInfo);
 
     useEffect(() => {
-        if (searchResults && Array.isArray(searchResults)) {
-            setSubscriptions(searchResults);
+        if (Array.isArray(subsResults)) {
+            setSubscriptions(subsResults);
         }
-    }, [searchResults]);
+    }, [subsResults]);
+
+    useEffect(() => {
+        // Actualiza los resultados de usuarios
+        if (Array.isArray(usersResults)) {
+            setUsers(usersResults);
+        }
+    }, [usersResults]);
+
+    const isLoading = subsLoading || usersLoading; 
+    const error = subsError || usersError; 
+
+    // Función para obtener la contraseña del usuario basada en el correo
+    const getUserPasswordByEmail = (email) => {
+        const user = users.find((user) => user.email === email);
+        return user ? user.password : 'No disponible';
+    };
 
     return (
         <div className="table-container">
-            <h3>Suscripciones de {userName || '...'}</h3>
+            <h3>Detalles de {userName || '...'}</h3>
             {isLoading && <p>Cargando...</p>}
             {error && <p>{error}</p>}
             <table className="table-accounts">
@@ -28,20 +47,25 @@ const TableAccount = ({ userName,userPassword}) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {subscriptions.length > 0 ? (
-                        subscriptions.map((sub) => (
-                            <tr key={sub.id_Subscription}>
-                                <td>{sub.name_user}</td>
-                                <td>{sub.email}</td>
-                                <td>{userPassword}</td>
-                                <td>{sub.platform}</td>
-                                <td>{sub.perfil}</td>
-                                <td>{sub.password}</td>
-                            </tr>
-                        ))
-                    ) : (
+                    {subscriptions.length > 0 && (
+                        subscriptions.map((sub) => {
+                            const userPassword = getUserPasswordByEmail(sub.email);
+
+                            return (
+                                <tr key={sub.id_Subscription}>
+                                    <td>{sub.name_user}</td>
+                                    <td>{sub.email}</td>
+                                    <td>{userPassword}</td>
+                                    <td>{sub.platform || 'No disponible'}</td>
+                                    <td>{sub.perfil || 'No disponible'}</td>
+                                    <td>{sub.password || 'No disponible'}</td>
+                                </tr>
+                            );
+                        })
+                    )}
+                    {subscriptions.length === 0 && users.length === 0 && (
                         <tr>
-                            <td colSpan="10">No hay suscripciones registradas.</td>
+                            <td colSpan="10">No se encontraron registros.</td>
                         </tr>
                     )}
                 </tbody>
